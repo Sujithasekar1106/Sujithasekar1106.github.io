@@ -80,7 +80,7 @@ export default function Hero({ onExplore, ready }: HeroProps) {
             transition={{ duration: reduceMotion ? 0.01 : 0.45, delay: 0.42 }}
             className="mt-6 flex justify-center"
           >
-            <PixelButton onClick={onExplore} className="min-w-[10rem] px-3.5 py-2.5 sm:min-w-[11rem]">
+            <PixelButton onClick={onExplore} className="min-w-[8.25rem] px-2.5 py-1.5 text-[9px] sm:min-w-[9rem] sm:text-[10px]">
               EXPLORE MY WORK
             </PixelButton>
           </motion.div>

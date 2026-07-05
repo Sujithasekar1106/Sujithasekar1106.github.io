@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import BackgroundEffects from './BackgroundEffects';
 import DesktopIcon from './DesktopIcon';
 import Hero from './Hero';
+import MusicPlayer from './MusicPlayer';
 import PixelButton from './PixelButton';
 import Taskbar from './Taskbar';
 import WindowFrame from './WindowFrame';
@@ -32,13 +33,6 @@ const sectionTitles = {
   resume: 'RESUME',
 } as const;
 
-const sectionSubtitles = {
-  about: 'B.E. CSE student at SSN College of Engineering.',
-  skills: 'Programming, web tech, data tools, and databases.',
-  projects: 'Java, Python, and AI projects from the resume.',
-  contact: 'Reach out by email, LinkedIn, or GitHub.',
-  resume: 'Education, achievements, and extracurricular highlights.',
-} as const;
 
 const aboutHighlights = [
   ['Program', 'B.E. Computer Science and Engineering'],
@@ -98,6 +92,8 @@ export default function PortfolioDesktop() {
   const reduceMotion = useReducedMotion();
   const [activeSection, setActiveSection] = useState<SectionId | null>(null);
   const [currentTime, setCurrentTime] = useState('');
+  const [isMusicOpen, setIsMusicOpen] = useState(false);
+  const [isMusicMuted, setIsMusicMuted] = useState(false);
 
   useEffect(() => {
     const format = () =>
@@ -184,7 +180,19 @@ export default function PortfolioDesktop() {
             </main>
           </div>
 
-          <Taskbar currentTime={currentTime} />
+          <Taskbar
+            currentTime={currentTime}
+            onMusicClick={() => setIsMusicOpen(!isMusicOpen)}
+            onVolumeClick={() => setIsMusicMuted((value) => !value)}
+            isMusicActive={isMusicOpen}
+            isMusicMuted={isMusicMuted}
+          />
+
+          <MusicPlayer
+            isOpen={isMusicOpen}
+            onClose={() => setIsMusicOpen(false)}
+            isMuted={isMusicMuted}
+          />
 
           {activeSection ? (
             <div
@@ -194,7 +202,6 @@ export default function PortfolioDesktop() {
               <div className="w-full max-w-4xl" onClick={(event) => event.stopPropagation()}>
                 <WindowFrame
                   title={sectionTitles[activeSection]}
-                  subtitle={sectionSubtitles[activeSection]}
                   onClose={closeAllWindows}
                   className="h-[min(78vh,44rem)] w-full"
                 >

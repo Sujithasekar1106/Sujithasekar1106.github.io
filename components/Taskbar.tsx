@@ -6,11 +6,24 @@ import { HeadsetGlyph, SoundGlyph, StartGlyph } from './RetroIcons';
 type TaskbarProps = {
   currentTime: string;
   onStartClick?: () => void;
+  onMusicClick?: () => void;
+  onVolumeClick?: () => void;
+  isMusicActive?: boolean;
+  isMusicMuted?: boolean;
 };
 
-export default function Taskbar({ currentTime, onStartClick }: TaskbarProps) {
+export default function Taskbar({
+  currentTime,
+  onStartClick,
+  onMusicClick,
+  onVolumeClick,
+  isMusicActive,
+  isMusicMuted
+}: TaskbarProps) {
   const controlShell =
-    'flex h-9 w-9 items-center justify-center border-[2px] border-black bg-[#efe7db] text-ink shadow-[0_1px_0_rgba(255,255,255,0.65)_inset,0_1px_0_rgba(0,0,0,0.35)] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-[1px]';
+    'relative flex h-9 w-9 items-center justify-center border-[2px] border-black bg-[#efe7db] text-ink shadow-[0_1px_0_rgba(255,255,255,0.65)_inset,0_1px_0_rgba(0,0,0,0.35)] transition-transform duration-150 hover:-translate-y-[1px] active:translate-y-[1px]';
+  const activeControlShell =
+    'relative flex h-9 w-9 items-center justify-center border-[2px] border-black bg-[#dfd7cb] text-ink shadow-[inset_2px_2px_4px_rgba(0,0,0,0.35)] translate-y-[1px]';
 
   return (
     <motion.footer
@@ -37,14 +50,23 @@ export default function Taskbar({ currentTime, onStartClick }: TaskbarProps) {
           <div className="flex items-center gap-2 border-l border-black/30 pl-2 sm:pl-3">
             <button
               type="button"
-              aria-label="Volume"
-              className={controlShell}
+              onClick={onVolumeClick}
+              aria-label={isMusicMuted ? 'Unmute music' : 'Mute music'}
+              className={isMusicMuted ? activeControlShell : controlShell}
             >
-              <SoundGlyph className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
+              <span className="relative flex h-4 w-4 items-center justify-center sm:h-[18px] sm:w-[18px]">
+                <SoundGlyph className="h-4 w-4 sm:h-[18px] sm:w-[18px]" />
+                {isMusicMuted ? <span className="absolute h-5 w-[3px] rotate-45 bg-burgundy" /> : null}
+              </span>
             </button>
-            <span className={controlShell}>
+            <button
+              type="button"
+              onClick={onMusicClick}
+              aria-label="Now Playing"
+              className={isMusicActive ? activeControlShell : controlShell}
+            >
               <HeadsetGlyph className="h-4 w-4" />
-            </span>
+            </button>
             <div className="pixel-font flex h-9 min-w-[5.5rem] items-center justify-center border-[2px] border-black bg-[#efe7db] px-2.5 text-center text-[10px] text-ink sm:min-w-[6rem]">
               {currentTime}
             </div>
